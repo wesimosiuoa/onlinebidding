@@ -142,11 +142,4 @@ This project wil be licensed under the **MIT License**. See the [LICENSE](LICENS
 * GitHub: [@wesimosiuoa](https://github.com/wesimosiuoa)
 * Founder, Wezi Tech Institute of Technology
 
-```
 
----
-
-I can also **create a ready-to-download `README.md` file** for you so you can directly place it in your project folder.  
-
-Do you want me to do that?
-```
