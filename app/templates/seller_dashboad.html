@@ -1,0 +1,77 @@
+{% extends "seller.base.html" %}
+{% block title %}Seller Dashboard | Online Bidding System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="fw-bold text-dark"><i class="bi bi-shop"></i> Seller Dashboard</h2>
+        <a href="/item/new" class="btn btn-warning shadow-sm"><i class="bi bi-plus-circle"></i> Post New Item</a>
+      </div>
+      <hr>
+    </div>
+  </div>
+
+  <!-- Quick Access Cards -->
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-box-seam display-4 text-warning"></i>
+          <h5 class="card-title mt-3">My Items</h5>
+          <p class="card-text">View and manage all items you have posted for auction.</p>
+          <a href="/seller/user_items" class="btn btn-outline-warning btn-sm">Manage Items</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-bar-chart-line display-4 text-primary"></i>
+          <h5 class="card-title mt-3">Active Auctions</h5>
+          <p class="card-text">Track your ongoing auctions and monitor bids in real time.</p>
+          <a href="/seller/auctions" class="btn btn-outline-primary btn-sm">View Auctions</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-trophy display-4 text-success"></i>
+          <h5 class="card-title mt-3">Closed Auctions</h5>
+          <p class="card-text">Review results and winners of your completed auctions.</p>
+          <a href="/seller/close" class="btn btn-outline-success btn-sm">View Closed</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notifications -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-dark text-light">
+          <i class="bi bi-bell"></i> Notifications
+        </div>
+        <div class="card-body p-0">
+          <ul class="list-group list-group-flush">
+            {% if notifications %}
+              {% for note in notifications %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <span>{{ note.message }}</span>
+                  <small class="text-muted">{{ note.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                </li>
+              {% endfor %}
+            {% else %}
+              <li class="list-group-item text-muted text-center py-3">
+                No new notifications at the moment.
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

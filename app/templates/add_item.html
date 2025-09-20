@@ -1,0 +1,69 @@
+{% extends "seller.base.html" %}
+{% block title %}Add Item | Online Bidding System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 animate__animated animate__fadeIn">
+        <div class="card-header bg-dark text-light text-center">
+          <h3 class="mb-0"><i class="bi bi-plus-circle"></i> Post New Item</h3>
+          <p class="mb-0 text-warning">Fill in the details to list your item for auction</p>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="/item/new" enctype="multipart/form-data">
+
+            <!-- Item ID (optional, hidden if auto-generated) -->
+            <!-- <input type="hidden" name="item_id" value=""> -->
+
+            <!-- Title -->
+            <div class="mb-3">
+              <label for="title" class="form-label">Item Title</label>
+              <input type="text" class="form-control" id="title" name="title" required placeholder="Enter item title">
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label for="description" class="form-label">Description</label>
+              <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter a detailed description"></textarea>
+            </div>
+
+            <!-- Starting Price -->
+            <div class="mb-3">
+              <label for="starting_price" class="form-label">Starting Price</label>
+              <input type="number" step="0.01" class="form-control" id="starting_price" name="starting_price" required placeholder="Enter starting price">
+            </div>
+
+            <!-- End Time -->
+            <div class="mb-3">
+              <label for="end_time" class="form-label">End Time</label>
+              <input type="datetime-local" class="form-control" id="end_time" name="end_time" required>
+            </div>
+
+            <!-- Auction Status -->
+            <div class="mb-3">
+              <label for="is_auction_active" class="form-label">Auction Status</label>
+              <select class="form-select" id="is_auction_active" name="is_auction_active">
+                <option value="1" selected>Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3">
+              <label for="img" class="form-label">Item Image</label>
+              <input type="file" class="form-control" id="img" name="img" accept="image/*">
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-warning w-100 fw-bold shadow-sm">
+              <i class="bi bi-upload"></i> Post Item
+            </button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

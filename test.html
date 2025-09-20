@@ -1,0 +1,70 @@
+<!-- {% extends "base.html" %}
+{% block title %}Online Bidding System - Items{% endblock %}
+
+{% block content %}
+<br>
+<div class="container mt-4">
+    <h1 class="text-center mb-4 fw-bold">Available Items for Bidding</h1>
+
+    <div class="row g-4">
+        {% for item in items %}
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100 hover-card" 
+                 style="transition: transform 0.3s ease, box-shadow 0.3s ease;">
+
+                {% if item.img %}
+                <img src="{{ url_for('static', filename='uploads/' ~ item.img) }}" 
+                     class="card-img-top rounded-top-4" 
+                     alt="{{ item.title }}" 
+                     style="height: 220px; object-fit: cover;">
+                {% else %}
+                <img src="https://via.placeholder.com/350x220?text=No+Image" 
+                     class="card-img-top rounded-top-4" 
+                     alt="{{ item.title }}">
+                {% endif %}
+
+                <div class="card-body">
+                    <h5 class="card-title">{{ item.title }}</h5>
+                    <p class="card-text text-muted">{{ item.description|truncate(100) }}</p>
+                    <p class="fw-bold text-primary">Starting Price: ${{ item.startingPrice }}</p>
+                    <p class="text-muted small">Ends: {{ item.endTime }}</p>
+                </div>
+
+                <div class="card-footer bg-white border-0 text-center pb-3">
+                    <a href="{{ url_for('main.item_detail', item_id=item.ItemID) }}" 
+                       class="btn btn-outline-primary btn-sm px-4 me-2">View Details</a>
+                    <a href="{{ url_for('main.place_bid', item_id=item.ItemID) }}" 
+                       class="btn btn-success btn-sm px-4">Place Bid</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">No items available for bidding at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+/* Card Hover Animation */
+.hover-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Smooth fade-in effect */
+.row.g-4 {
+    animation: fadeInUp 0.8s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+{% endblock %} -->

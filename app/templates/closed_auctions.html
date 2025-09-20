@@ -1,0 +1,54 @@
+{% extends "seller.base.html" %}
+{% block title %}Closed Auctions | Online Bidding System{% endblock %}
+
+{% block content %}
+<br><br>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">Closed Auctions</h2>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Image</th>
+                <th>Item Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set closed_items = items | selectattr("isAuctionActive", "equalto", 0) | list %}
+            {% for item in closed_items %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>
+                    {% if item.img %}
+                        <img src="{{ url_for('static', filename=item.img.replace('\\', '/').split('static/')[-1]) }}" alt="Item Image" style="width:80px;height:auto;">
+                    {% else %}
+                        No Image
+                    {% endif %}
+                </td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.description }}</td>
+                <td>${{ "%.2f"|format(item.startingPrice) }}</td>
+                <td>
+                    <span class="badge bg-secondary">Closed</span>
+                </td>
+                <td>
+                    <a href="{{ url_for('main.update_item', item_id=item.ItemID) }}" class="btn btn-warning btn-sm">Update</a>
+                    <a href="{{ url_for('main.delete_item', item_id=item.ItemID) }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this item?')">Delete</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7" class="text-center text-muted">No closed auctions found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "seller.base.html" %}
+{% block title %}Seller Dashboard | Online Bidding System{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Auctions</h2>
+
+    {% if items %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Item Title</th>
+                        <th>Starting Price</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                        <th>Bidder ID</th>
+                        <th>Bid Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set grouped_items = {} %}
+                    {% for item in items %}
+                        {% if item.title not in grouped_items %}
+                            {% set _ = grouped_items.update({ item.title: [] }) %}
+                        {% endif %}
+                        {% set _ = grouped_items[item.title].append(item) %}
+                    {% endfor %}
+
+                    {% for title, bids in grouped_items.items() %}
+                        {% set highest_bid = bids | max(attribute='bidAmount') %}
+                        {% for bid in bids %}
+                            <tr class="{% if bid.bidAmount == highest_bid %}table-success{% endif %}">
+                                <td>{{ bid.title }}</td>
+                                <td>${{ bid.startingPrice }}</td>
+                                <td>{{ bid.endTime.strftime('%Y-%m-%d %H:%M:%S') if bid.endTime else 'N/A' }}</td>
+                                <td>
+                                    {% if bid.isAuctionActive %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Closed</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ bid.bidderID if bid.bidderID else 'No Bids' }}</td>
+                                <td>
+                                    {% if bid.bidAmount %}
+                                        ${{ bid.bidAmount }}
+                                    {% else %}
+                                        <span class="text-muted">No Bids</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No auctions found for this user.</div>
+    {% endif %}
+</div>
+{% endblock %}

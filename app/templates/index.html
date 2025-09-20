@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Online Bidding System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row align-items-center mb-5">
+    <div class="col-lg-6 text-center text-lg-start">
+      <h1 class="display-4 fw-bold text-gradient mb-3 animate__animated animate__fadeInDown">
+        Welcome to <span class="text-primary">Online Bidding System</span>
+      </h1>
+      <p class="lead text-muted animate__animated animate__fadeInLeft">
+        Discover, bid, and win exclusive items in real-time auctions. Experience seamless, secure, and exciting online bidding!
+      </p>
+      <a href="/item_list" class="btn btn-warning btn-lg shadow-lg mt-3 animate__animated animate__pulse animate__infinite">
+        <i class="bi bi-box-seam"></i> View Items
+      </a>
+    </div>
+    <div class="col-lg-6 text-center animate__animated animate__zoomIn">
+      <div id="auctionCarousel" class="carousel slide" data-bs-ride="carousel" style="max-height: 350px;">
+        <div class="carousel-inner rounded shadow-lg">
+          <div class="carousel-item active">
+            <img src="{{ url_for('static', filename='images/pexels-glen-mc-call-1137859051-21298302.jpg') }}" class="d-block w-100" alt="Auction 1" style="max-height: 350px; object-fit: cover;">
+          </div>
+          <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/pexels-tuurt-812264.jpg') }}" class="d-block w-100" alt="Auction 2" style="max-height: 350px; object-fit: cover;">
+          </div>
+          <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/pexels-sofianunezph-19143577.jpg') }}" class="d-block w-100" alt="Auction 3" style="max-height: 350px; object-fit: cover;">
+          </div>
+          <div class="carousel-item">
+            <img src="{{ url_for('static', filename='images/pexels-pixabay-51383.jpg') }}" class="d-block w-100" alt="Auction 4" style="max-height: 350px; object-fit: cover;">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#auctionCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#auctionCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg h-100 animate__animated animate__fadeInUp">
+        <div class="card-body text-center">
+          <i class="bi bi-search display-4 text-primary mb-3"></i>
+          <h5 class="card-title fw-bold">Browse Items</h5>
+          <p class="card-text text-muted">Explore a wide range of auction items, from electronics to collectibles.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+        <div class="card-body text-center">
+          <i class="bi bi-cash-coin display-4 text-success mb-3"></i>
+          <h5 class="card-title fw-bold">Place Bids</h5>
+          <p class="card-text text-muted">Bid in real-time and compete with others for your favorite items.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+        <div class="card-body text-center">
+          <i class="bi bi-trophy display-4 text-warning mb-3"></i>
+          <h5 class="card-title fw-bold">Win Auctions</h5>
+          <p class="card-text text-muted">Win exclusive items and enjoy secure transactions and fast delivery.</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-0 shadow-lg h-100 animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+        <div class="card-body text-center">
+          <i class="bi bi-person-plus display-4 text-info mb-3"></i>
+          <h5 class="card-title fw-bold">Join Us</h5>
+          <p class="card-text text-muted">Register now and start your bidding journey with our vibrant community.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form method="POST" action="/login">
+        <div class="modal-header bg-dark text-light">
+          <h5 class="modal-title" id="loginModalLabel"><i class="bi bi-person"></i> Login</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="loginEmail" class="form-label">Email address</label>
+            <input type="text" class="form-control" id="loginEmail" name="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="loginPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" name="password" required>
+          </div>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="keepMe" name="keep_me">
+            <label class="form-check-label" for="keepMe">Keep me logged in</label>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <a href="/forgot-password" class="text-decoration-none text-primary">Forgot password?</a>
+            <a href="/register" class="btn btn-outline-warning btn-sm">Register</a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-warning w-100">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Show login modal when Login link/button is clicked
+  document.addEventListener('DOMContentLoaded', function() {
+    // Find all login links/buttons
+    document.querySelectorAll('a[href="/login"], .login-trigger').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        loginModal.show();
+      });
+    });
+  });
+</script>
+
+<style>
+  .text-gradient {
+    background: linear-gradient(90deg, #ffb347 0%, #ffcc80 50%, #2196f3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  body {
+    background: linear-gradient(135deg, #f8fafc 0%, #e3f2fd 100%);
+  }
+  .card {
+    transition: transform 0.3s cubic-bezier(.17,.67,.83,.67), box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 8px 32px rgba(33,150,243,0.15);
+  }
+</style>
+<!-- Add Animate.css and Bootstrap Icons in base.html if not already included -->
+{% endblock %}
