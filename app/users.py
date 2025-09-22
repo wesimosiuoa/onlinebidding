@@ -1,72 +1,52 @@
-import pymysql
-
 class User:
-    def __init__(self, user_type, name, email, password, phone, role_id):
+    def __init__(self, user_type, first_name, last_name, email, password, role_id):
         self._user_type = user_type
-        self._name = name
+        self._first_name = first_name   # this sets the private var directly
+        self._last_name = last_name
         self._email = email
         self._password = password
-        self._phone = phone
         self._role_id = role_id
 
-    # Getters
     @property
-    def user_type(self):
-        return self._user_type
+    def first_name(self):
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, value):
+        self._first_name = value
 
     @property
-    def name(self):
-        return self._name
+    def last_name(self):
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, value):
+        self._last_name = value
 
     @property
     def email(self):
         return self._email
 
-    @property
-    def password(self):
-        return self._password
-
-    @property
-    def phone(self):
-        return self._phone
-
-    @property
-    def role_id(self):
-        return self._role_id
-
-    # Setters
-    @user_type.setter
-    def user_type(self, value):
-        self._user_type = value
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
     @email.setter
     def email(self, value):
         self._email = value
 
+    # etc. for password, role_id
+    @property
+    def password(self):
+        return self._password
     @password.setter
     def password(self, value):
         self._password = value
-
-    @phone.setter
-    def phone(self, value):
-        self._phone = value
-
+    @property
+    def role_id(self):
+        return self._role_id
     @role_id.setter
     def role_id(self, value):
         self._role_id = value
-
-    def __repr__(self):
-        return f'<User {self.name}>'
-
-    def save_to_db(self, connection):
-        with connection.cursor() as cursor:
-            sql = """
-                INSERT INTO User (Name, Email, Password, roleID)
-                VALUES (%s, %s, %s, %s)
-            """
-            cursor.execute(sql, (self.name, self.email, self.password, self.role_id))
-            connection.commit()
+    @property
+    def user_type(self):
+        return self._user_type
+    @user_type.setter
+    def user_type(self, value):
+        self._user_type = value 

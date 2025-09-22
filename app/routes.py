@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, render_template, request, redirect, url_for, flash, session
+from flask import Blueprint , current_app, render_template, request, redirect, url_for, flash, session
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
@@ -8,6 +8,8 @@ from app.users import User
 from app.item import Item
 from app.models import get_db_connection
 import pymysql 
+from werkzeug.security import generate_password_hash
+from app.db_helper import insert_user, user_login, get_user_by_email, get_role_name, get_item_by_seller
 
 
 main = Blueprint('main', __name__)
@@ -23,28 +25,38 @@ def register():
         name = request.form.get('name')
         email = request.form.get('email')
         password = request.form.get('password')
+        first_name = request.form.get('first_name')
+        last_name = request.form.get('last_name')
         confirm_password = request.form.get('confirm_password')
-        phone = request.form.get('phone')
-
-        role_map = {'seller': 1, 'bidder': 2, 'admin': 3}
-        role_id = role_map.get(user_type)
+        # phone = request.form.get('phone')
 
         if password != confirm_password:
             flash("Passwords do not match!", "danger")
             return render_template('register.html')
 
-        if get_user_by_email(email):
-            flash("Email already registered!", "danger")
+        # map user_type to role string
+        role_map = {'seller': 'seller', 'bidder': 'buyer'}
+        role = role_map.get(user_type)
+
+        try:
+            existing_user = get_user_by_email(email)
+            if existing_user:
+                flash("Email already registered!", "danger")
+                return render_template('register.html')
+            else : 
+                        # hash password
+                hashed_password = generate_password_hash(password)
+
+                # create user object
+                user = User(user_type, first_name, last_name, email, hashed_password, role)
+                print("DEBUG: User object created:", user.__dict__)
+                # insert into DB
+                insert_user(user)
+                flash("Registration successful!", "success")
+                return redirect(url_for('main.index'))
+        except Exception as e:
+            flash(f"An error occurred: {str(e)}", "danger")
             return render_template('register.html')
-
-        from werkzeug.security import generate_password_hash
-        hashed_password = generate_password_hash(password)
-
-        user = User(user_type, name, email, hashed_password, phone, role_id)
-        insert_user(user.user_type, user.name, user.email, user.password, user.phone, user.role_id)
-
-        flash("Registration successful!", "success")
-        return redirect(url_for('main.index'))
 
     return render_template('register.html')
 
@@ -62,7 +74,7 @@ def add_item():
             user_id = session.get('user_id')
             img = request.files.get('img')
 
-            print("DEBUG: Received form data:", item_id, title, description, starting_price, end_time, is_auction_active, user_id, img)
+            print("DEBUG: Received 2form data:", item_id, title, description, starting_price, end_time, is_auction_active, user_id, img)
 
             # Validation
             if not title or not description or not starting_price or not end_time:
@@ -104,12 +116,18 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        user = login_user(email, password)
-        if user:
-            session['user_id'] = user['USERID']
-            session['role_id'] = user['roleID']
-            session['role_name'] = get_role_name(user['roleID'])  # Helper function below
-            flash(f"Welcome, {user['Name']}! You are logged in as {session['role_name']}.", "success")
+        # Create a temporary User object
+        user = User(None, None, None, email, password, None)
+        user_row = user_login(user)
+        role = get_role_name(user) if user_row else None
+
+        if user_row:
+            session['user_id'] = user_row['user_id']
+            session['role_id'] = user_row['role']
+            session['role_name'] = role  # Helper function
+
+            flash(f"Welcome, {user_row['first_name']}! You are logged in as {session['role_name']}.", "success")
+
             # Redirect based on role
             if session['role_name'] == 'seller':
                 return redirect(url_for('main.seller_dashboard'))
@@ -121,14 +139,12 @@ def login():
                 return redirect(url_for('main.index'))
         else:
             flash("Invalid email or password!", "danger")
-            return render_template('index.html')  # Or your login modal
+            return render_template('index.html')
 
-    return render_template('index.html')  # Or your login modal
+    return render_template('index.html')
 
-# Helper function to get role name from roleID
-def get_role_name(role_id):
-    role_map = {1: 'seller', 2: 'bidder', 3: 'admin'}
-    return role_map.get(role_id, 'user')
+
+
 
 @main.route('/seller/dashboard')
 def seller_dashboard():

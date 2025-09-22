@@ -33,7 +33,7 @@ def get_user_by_email(email):
     connection = get_db_connection()
     try:
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = "SELECT * FROM User WHERE Email = %s"
+            sql = "SELECT * FROM users WHERE Email = %s"
             cursor.execute(sql, (email,))
             return cursor.fetchone()
     finally:
@@ -43,7 +43,7 @@ def login_user(email, password):
     connection = get_db_connection()
     try:
         with connection.cursor(pymysql.cursors.DictCursor) as cursor:
-            sql = "SELECT * FROM User WHERE Email = %s AND Password = %s"
+            sql = "SELECT * FROM users WHERE Email = %s AND Password = %s"
             cursor.execute(sql, (email, password))
             return cursor.fetchone()
         print("DEBUG: User returned from login_user:", user)
